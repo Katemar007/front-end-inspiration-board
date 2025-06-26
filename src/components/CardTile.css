@@ -1,0 +1,29 @@
+.card-tile {
+	display: grid;
+	aspect-ratio: 1 / 1; /* square shape */
+	border: 1px solid gray;
+	padding: 1rem;
+	border-radius: 4px;
+	background-color: white;
+
+	grid-template-rows: 3fr 1fr;
+	gap: 0.25rem;
+}
+
+.message-box {
+	grid-row: 1 / 2;
+}
+
+.footer {
+	grid-row: 2 / 3;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.5rem;
+}
+
+.grid-box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0.25rem;
+}

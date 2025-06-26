@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BoardList from './components/BoardList';
+import CardList from './components/CardList';
 import './App.css'
-
-const BASE_URL = import.meta.env.VITE_APP_BACKEND_URL;
-
+import { useState } from 'react';
+import { HashRouter, Route, Routes, Link } from "react-router-dom";
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
@@ -16,36 +16,33 @@ function App() {
     { board_id: 3, title: "Recipes", owner: "Kate" },
     { board_id: 4, title: "Design", owner: "Solhee" },
   ];
-
-  useEffect(() => {
-    console.log("Fetching from:", `${BASE_URL}/boards`);
-    axios.get(`${BASE_URL}/boards`)
-      .then((response) => {
-        console.log("Response:", response.data);
-        setBoardsData(response.data); // If this works, switch to this in UI
-      })
-      .catch((error) => {
-        console.error("Error fetching boards:", error);
-      });
-  }, []);
-
-  const handleBoardSelect = (board) => {
-    setSelectedBoard(board);
-  };
-
-
-  
- 
-
+  const fakeCards = [
+    {id: 1, message: "A", likesCount: 0},
+    {id: 2, message: "B", likesCount: 0},
+    {id: 3, message: "C", likesCount: 0},
+    {id: 4, message: "D", likesCount: 0},
+    {id: 5, message: "E", likesCount: 0},
+    {id: 6, message: "F", likesCount: 0},
+    {id: 7, message: "G", likesCount: 0}
+  ]
+  const [selectedBoard, setSelectedBoard] = useState(null);
+  // const [cardData, setCardData] = useState([]); 
+  // // Need to get info from db based on which board is selected.
+  // // use that information to get initial cardData
   return (
     <div className="App">
       <h1>Inspiration Board</h1>
       <BoardList
         boards={boardsData.length > 0 ? boardsData : fakeBoards}
         selectedBoard={selectedBoard}
-        onBoardSelect={handleBoardSelect}
-        
+        onBoardSelect={(board) => {
+          console.log("Selected:", board);
+          setSelectedBoard(board);
+        }}
       />
+      <CardList
+        cards={fakeCards}
+      ></CardList>
     </div>
   );
 }
