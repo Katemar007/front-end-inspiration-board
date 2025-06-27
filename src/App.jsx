@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import './App.css';
 import BoardList from './components/BoardList';
 import CardList from './components/CardList';
-import './App.css'
-import { useState } from 'react';
+import BoardForm from './components/BoardForm';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -52,13 +54,43 @@ const AddCardLikeApi = (card_id) => {
   });
 };
 
+const URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 function App() {
-  const fakeBoards = [
+  const [boardsData, setBoardsData] = useState([]);
+  const [selectedBoard, setSelectedBoard] = useState(null);
+  
+  // getting all boards on load
+  useEffect(() => {
+    axios.get(`${URL}/boards`)
+      .then((response) => {
+        setBoardsData(response.data);
+        console.log(response.data); // delete this later
+        console.log(Array.isArray(response.data)); // should be true
+      })
+      .catch((error) => {
+        console.error("Error fetching boards:", error)
+      });
+  }, []);
+
+  // adding new board
+  const addNewBoard = (newBoard) => {
+    axios.post(`${URL}/boards`, newBoard)
+      .then((response) => {
+        console.log(response.data);
+        setBoardsData(prevBoards => [...prevBoards, response.data.board]);
+      })
+      .catch((error) => {
+        console.error("Error creating board:", error);
+      });
+  };
+
+  /*const fakeBoards = [
     { board_id: 1, title: "Travel", owner: "Danielle" },
     { board_id: 2, title: " Workspace", owner: "Tamika" },
     { board_id: 3, title: "Recipes", owner: "Kate" },
     { board_id: 4, title: "Design", owner: "Solhee" },
-  ];
+  ];*/
   const fakeCards = [
     {id: 1, message: "A", likesCount: 0},
     {id: 2, message: "B", likesCount: 0},
@@ -68,20 +100,18 @@ function App() {
     {id: 6, message: "F", likesCount: 0},
     {id: 7, message: "G", likesCount: 0}
   ]
-  const [selectedBoard, setSelectedBoard] = useState(null);
+
   // const [cardData, setCardData] = useState([]); 
   // // Need to get info from db based on which board is selected.
   // // use that information to get initial cardData
   return (
     <div className="App">
       <h1>Inspiration Board</h1>
+      <BoardForm onBoardSubmit={addNewBoard} />
       <BoardList
-        boards={fakeBoards}
+        boards={boardsData}
         selectedBoard={selectedBoard}
-        onBoardSelect={(board) => {
-          console.log("Selected:", board);
-          setSelectedBoard(board);
-        }}
+        onBoardSelect={setSelectedBoard}
       />
       <CardList
         cards={fakeCards}

@@ -1,0 +1,21 @@
+.board-tile {
+  background-color: #fff9c4; 
+  border: 2px solid #f0e68c;
+  aspect-ratio: 1 / 1; /* square shape like the cards */
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+  width: 200px;
+  transition: transform 0.2s ease;
+}
+
+.board-tile:hover {
+  transform: scale(1.05);
+}
+
+.board-tile.selected {
+  border: 2px solid #4f83cc;
+  background-color: #e3f2fd; 
+}
