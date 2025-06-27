@@ -1,3 +1,5 @@
+import './BoardTile.css';
+
 function BoardTile({ board, onSelect, isSelected }) {
   const handleClick = () => {
     onSelect(board);
@@ -6,13 +8,7 @@ function BoardTile({ board, onSelect, isSelected }) {
   return (
     <div
       onClick={handleClick}
-      style={{
-        border: isSelected ? '2px solid blue' : '1px solid gray',
-        padding: '10px',
-        margin: '10px',
-        backgroundColor: 'white',
-        cursor: 'pointer',
-      }}
+      className={`board-tile ${isSelected ? 'selected' : ''}`}
     >
       <h3>{board.title}</h3>
       <p>Owner: {board.owner}</p>
