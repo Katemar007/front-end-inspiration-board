@@ -1,14 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
+import './App.css';
 import BoardList from './components/BoardList';
 import CardList from './components/CardList';
-import './App.css'
 import BoardForm from './components/BoardForm';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
 
-const URL = import.meta.env.VITE_API_BACKEND_URL
-
+const URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
@@ -19,6 +17,8 @@ function App() {
     axios.get(`${URL}/boards`)
       .then((response) => {
         setBoardsData(response.data);
+        console.log(response.data); // delete this later
+        console.log(Array.isArray(response.data)); // should be true
       })
       .catch((error) => {
         console.error("Error fetching boards:", error)
@@ -29,7 +29,8 @@ function App() {
   const addNewBoard = (newBoard) => {
     axios.post(`${URL}/boards`, newBoard)
       .then((response) => {
-        setBoardsData([...boardsData, response.data]);
+        console.log(response.data);
+        setBoardsData(prevBoards => [...prevBoards, response.data.board]);
       })
       .catch((error) => {
         console.error("Error creating board:", error);
