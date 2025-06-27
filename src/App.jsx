@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
 import axios from 'axios';
 
-const kBaseUrl = 'http://127.0.0.1:5000';
+const URL = import.meta.env.VITE_API_URL
 
 // post new card
 const postCardApi = (boardId, newCardData)=> {
-  return axios.post(`${kBaseUrl}/boards/${boardId}/cards`,newCardData)
+  return axios.post(`${URL}/boards/${boardId}/cards`,newCardData)
     .then(response => {
       const card = response.data.card;
       return {
@@ -26,7 +26,7 @@ const postCardApi = (boardId, newCardData)=> {
 // GET all cards
 const getAllCardsApi = (boardId) => {
   return axios
-    .get(`${kBaseUrl}/boards/${boardId}/cards`)
+    .get(`${URL}/boards/${boardId}/cards`)
     .then((response) => {
       return response.data.map(card => ({
           card_id : card.card_id,
@@ -41,13 +41,13 @@ const getAllCardsApi = (boardId) => {
 };
 // delete card
 const deleteCardApi = (card_id) => {
-  return axios.delete(`${kBaseUrl}/cards/${card_id}`).catch((error) => {
+  return axios.delete(`${URL}/cards/${card_id}`).catch((error) => {
     console.log(error);
   });
 };
 // change like count
 const AddCardLikeApi = (card_id) => {
-  return axios.put(`${kBaseUrl}/cards/${card_id}/like`).catch((error) => {
+  return axios.put(`${URL}/cards/${card_id}/like`).catch((error) => {
     console.log(error);
   });
 };
