@@ -1,6 +1,6 @@
 import './CardTile.css';
 
-const CardTile = ({ id, message, likesCount}) => { // add id in later
+const CardTile = ({ id, message, likesCount }) => { // add id in later
   return (
     <div className="card-tile">
       <p className="message-box">{message}</p>
