@@ -3,6 +3,54 @@ import CardList from './components/CardList';
 import './App.css'
 import { useState } from 'react';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
+import axios from 'axios';
+
+const kBaseUrl = 'http://127.0.0.1:5000';
+
+// post new card
+const postCardApi = (boardId, newCardData)=> {
+  return axios.post(`${kBaseUrl}/boards/${boardId}/cards`,newCardData)
+    .then(response => {
+      const card = response.data.card;
+      return {
+          card_id : card.card_id,
+          message: card.message,
+          likes_count: card.likes_count,
+          board_id: card.board_id
+      };
+    })
+    .catch(error=>{
+      console.log(error);
+    });
+};
+// GET all cards
+const getAllCardsApi = (boardId) => {
+  return axios
+    .get(`${kBaseUrl}/boards/${boardId}/cards`)
+    .then((response) => {
+      return response.data.map(card => ({
+          card_id : card.card_id,
+          message: card.message,
+          likes_count: card.likes_count,
+          board_id: card.board_id
+      }));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+// delete card
+const deleteCardApi = (card_id) => {
+  return axios.delete(`${kBaseUrl}/cards/${card_id}`).catch((error) => {
+    console.log(error);
+  });
+};
+// change like count
+const AddCardLikeApi = (card_id) => {
+  return axios.put(`${kBaseUrl}/cards/${card_id}/like`).catch((error) => {
+    console.log(error);
+  });
+};
 
 function App() {
   const fakeBoards = [
