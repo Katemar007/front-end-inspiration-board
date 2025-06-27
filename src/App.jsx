@@ -7,7 +7,7 @@ import './App.css'
 import BoardForm from './components/BoardForm';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
 
-const URL = import.meta.env.VITE_API_URL
+const URL = import.meta.env.VITE_API_BACKEND_URL
 
 
 function App() {
