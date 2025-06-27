@@ -5,9 +5,8 @@ import BoardList from './components/BoardList';
 import CardList from './components/CardList';
 import BoardForm from './components/BoardForm';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
-import axios from 'axios';
 
-const URL = import.meta.env.VITE_API_URL
+const URL = import.meta.env.VITE_API_BACKEND_URL;
 
 // post new card
 const postCardApi = (boardId, newCardData)=> {
@@ -15,10 +14,10 @@ const postCardApi = (boardId, newCardData)=> {
     .then(response => {
       const card = response.data.card;
       return {
-          card_id : card.card_id,
-          message: card.message,
-          likes_count: card.likes_count,
-          board_id: card.board_id
+        card_id : card.card_id,
+        message: card.message,
+        likes_count: card.likes_count,
+        board_id: card.board_id
       };
     })
     .catch(error=>{
@@ -31,10 +30,10 @@ const getAllCardsApi = (boardId) => {
     .get(`${URL}/boards/${boardId}/cards`)
     .then((response) => {
       return response.data.map(card => ({
-          card_id : card.card_id,
-          message: card.message,
-          likes_count: card.likes_count,
-          board_id: card.board_id
+        card_id : card.card_id,
+        message: card.message,
+        likes_count: card.likes_count,
+        board_id: card.board_id
       }));
     })
     .catch((error) => {
@@ -54,12 +53,13 @@ const AddCardLikeApi = (card_id) => {
   });
 };
 
-const URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 function App() {
   const [boardsData, setBoardsData] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState(null);
-  
+  // // Need to get info from db based on which board is selected.
+  // // use that information to get initial cardData
+  const [cardData, setCardData] = useState([]);
   // getting all boards on load
   useEffect(() => {
     axios.get(`${URL}/boards`)
@@ -73,6 +73,16 @@ function App() {
       });
   }, []);
 
+  // initial load cards for each selected board:
+  useEffect(() => {
+    if (selectedBoard) {
+      getAllCardsApi(selectedBoard.board_id)
+        .then(cards => {
+          setCardData(cards);
+        });
+    }
+  }, [selectedBoard]);
+
   // adding new board
   const addNewBoard = (newBoard) => {
     axios.post(`${URL}/boards`, newBoard)
@@ -85,6 +95,34 @@ function App() {
       });
   };
 
+  // add card to the selected board
+  const addNewCard = (newCardData) => {
+    postCardApi(selectedBoard.board_id, newCardData)
+      .then(newCard => {
+        setCardData(prevCards => [...prevCards, newCard]);
+      });
+  };
+  // Delete a card and change the state
+  const deleteCard = (cardId) => {
+    deleteCardApi(cardId)
+      .then(() => {
+        setCardData(prevCards => prevCards.filter(card => card.card_id !== cardId));
+      });
+  };
+
+  // Add 1 to like of a card
+  const addLikeToCard = (cardId) => {
+    AddCardLikeApi(cardId)
+      .then(() => {
+        setCardData(prevCards => 
+          prevCards.map(card => 
+            card.card_id === cardId 
+              ? {...card, likes_count: card.likes_count + 1}
+              : card
+          )
+        );
+      });
+  };
   /*const fakeBoards = [
     { board_id: 1, title: "Travel", owner: "Danielle" },
     { board_id: 2, title: " Workspace", owner: "Tamika" },
@@ -101,9 +139,6 @@ function App() {
     {id: 7, message: "G", likesCount: 0}
   ]
 
-  // const [cardData, setCardData] = useState([]); 
-  // // Need to get info from db based on which board is selected.
-  // // use that information to get initial cardData
   return (
     <div className="App">
       <h1>Inspiration Board</h1>
@@ -114,7 +149,10 @@ function App() {
         onBoardSelect={setSelectedBoard}
       />
       <CardList
-        cards={fakeCards}
+        cards={cardData}
+        onDeleteCard={deleteCard}
+        onAddCard={addNewCard}
+        onAddLike={addLikeToCard}
       ></CardList>
     </div>
   );
