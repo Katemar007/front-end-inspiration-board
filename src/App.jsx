@@ -11,6 +11,7 @@ const URL = import.meta.env.VITE_APP_BACKEND_URL;
 function App() {
   const [boardsData, setBoardsData] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState(null);
+  const [showBoardForm, setShowBoardForm] = useState(true)
   
   // getting all boards on load
   useEffect(() => {
@@ -36,7 +37,9 @@ function App() {
         console.error("Error creating board:", error);
       });
   };
-
+  const toggleBoardForm = () => {
+    setShowBoardForm(prev => !prev);
+  };
   /*const fakeBoards = [
     { board_id: 1, title: "Travel", owner: "Danielle" },
     { board_id: 2, title: " Workspace", owner: "Tamika" },
@@ -59,7 +62,18 @@ function App() {
   return (
     <div className="App">
       <h1>Inspiration Board</h1>
-      <BoardForm onBoardSubmit={addNewBoard} />
+
+      {/* Board toggle button */}
+      <div className="board-form-container">
+        {showBoardForm && (
+          <BoardForm onBoardSubmit={addNewBoard} />
+        )}      
+        <button id="toggle-board-form" onClick={toggleBoardForm}>
+          {showBoardForm ? "Hide Board form" : "Show Board form"}
+        </button>
+      </div>
+      {/* Render or Hide the form */}
+
       <BoardList
         boards={boardsData}
         selectedBoard={selectedBoard}
