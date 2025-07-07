@@ -1,15 +1,17 @@
 import CardTile from './CardTile.jsx'
 import './CardList.css'
 
-const CardList = ({ cards }) => {
+const CardList = ({ cards, onDeleteCard, onAddLike }) => {
   const getCardListJSX = () => {
     return cards.map((card) => {
       return (
         <CardTile
-          key={card.id}
-          id={card.id}
+          key={card.card_id}
+          id={card.card_id}
           message={card.message}
-          likesCount={card.likesCount}
+          likesCount={card.likes_count}
+          onDelete={() => onDeleteCard(card.card_id)}
+          onLike={() => onAddLike(card.card_id)}
         ></CardTile>
       );
     });
