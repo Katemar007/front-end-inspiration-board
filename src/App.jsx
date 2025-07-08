@@ -4,6 +4,7 @@ import './App.css';
 import BoardList from './components/BoardList';
 import CardList from './components/CardList';
 import BoardForm from './components/BoardForm';
+import CardForm from './components/CardForm';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
 
 const URL = import.meta.env.VITE_APP_BACKEND_URL;
@@ -12,13 +13,14 @@ function App() {
   const [boardsData, setBoardsData] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [showBoardForm, setShowBoardForm] = useState(true)
+  const [cardData, setCardsData] = useState([]);
   
   // getting all boards on load
   useEffect(() => {
     axios.get(`${URL}/boards`)
       .then((response) => {
         setBoardsData(response.data);
-        console.log(response.data); // delete this later
+        // console.log(response.data); // delete this later
         console.log(Array.isArray(response.data)); // should be true
       })
       .catch((error) => {
@@ -26,13 +28,29 @@ function App() {
       });
   }, []);
 
+  // listing Cards for selected Board
+  useEffect(() => {
+    if (!selectedBoard) return;
+
+    axios.get(`${URL}/boards/${selectedBoard.id}/cards`)
+      .then((response) => {
+        setCardsData(response.data);
+        console.log("Cards fetched:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching cards:", error);
+      });
+  }, [selectedBoard]);
+
   // adding new board
   const addNewBoard = (newBoard) => {
     axios.post(`${URL}/boards`, newBoard)
       .then((response) => {
         console.log(response.data);
         setBoardsData(prevBoards => [...prevBoards, response.data.board]);
+        setSelectedBoard(response.data.board)
       })
+
       .catch((error) => {
         console.error("Error creating board:", error);
       });
@@ -40,6 +58,22 @@ function App() {
   const toggleBoardForm = () => {
     setShowBoardForm(prev => !prev);
   };
+
+  // add new Card
+  const addNewCard = (cardData) => {
+    if (!selectedBoard) return;
+
+    axios.post(`${URL}/boards/${selectedBoard.id}/cards`, cardData)
+      .then((response) => {
+        const newCard = response.data.card;
+        setCardsData(prevCards => [...prevCards, newCard]);
+        console.log("Card created:", response.data.card);
+      })
+      .catch((error) => {
+        console.error("Error creating card:", error);
+      });
+  };
+
   /*const fakeBoards = [
     { board_id: 1, title: "Travel", owner: "Danielle" },
     { board_id: 2, title: " Workspace", owner: "Tamika" },
@@ -79,9 +113,16 @@ function App() {
         selectedBoard={selectedBoard}
         onBoardSelect={setSelectedBoard}
       />
-      <CardList
+      {/* <CardList
         cards={fakeCards}
-      ></CardList>
+      ></CardList> */}
+      {selectedBoard && selectedBoard.id && (
+        <>
+          <h2>Cards for "{selectedBoard.title}"</h2>
+          <CardList cards={cardData} />
+          <CardForm postNewCard={addNewCard} selectedBoard={selectedBoard} />
+        </>
+      )}
     </div>
   );
 }
