@@ -120,7 +120,9 @@ function App() {
 
   // Add 1 to like of a card
   const addLikeToCard = (cardId) => {
-    AddCardLikeApi(selectedBoard.board_id, cardId)
+    if (!selectedBoard) return;
+
+    AddCardLikeApi(selectedBoard.id, cardId)
       .then(() => {
         setCardData(prevCards => 
           prevCards.map(card => 
