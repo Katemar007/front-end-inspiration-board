@@ -1,0 +1,45 @@
+.card-form {
+    margin: 20px;
+    padding: 15px;
+    background-color: #faf4b5;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    max-width: 30%;
+}
+
+.card-form h2 {
+    margin-top: 0;
+}
+
+.card-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.card-form input {
+    width: 100%;
+    padding: 6px;
+    margin-top: 4px;
+    box-sizing: border-box;
+}
+
+.card-form button {
+    padding: 8px 12px;
+    background-color: #3a6d03;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.error-input {
+    border: 2px solid red;
+    outline: none;
+}

@@ -120,7 +120,9 @@ function App() {
         <>
           <h2>Cards for "{selectedBoard.title}"</h2>
           <CardList cards={cardData} />
-          <CardForm postNewCard={addNewCard} selectedBoard={selectedBoard} />
+          <div className="card-form-container">
+            <CardForm postNewCard={addNewCard} selectedBoard={selectedBoard} />
+          </div>
         </>
       )}
     </div>
