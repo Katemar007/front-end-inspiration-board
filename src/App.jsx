@@ -35,13 +35,15 @@ const getAllCardsApi = (boardId) => {
   return axios
     .get(`${URL}/boards/${boardId}/cards`)
     .then((response) => {
-      console.log(response.data)
-      return response.data.map(card => ({
-        card_id : card.card_id,
-        message: card.message,
-        likes_count: card.likes_count,
-        board_id: card.board_id
-      }));
+      const sortedCards = response.data
+        .map(card => ({
+          card_id : card.card_id,
+          message: card.message,
+          likes_count: card.likes_count,
+          board_id: card.board_id
+        }))
+        .sort((a, b) => a.card_id - b.card_id);
+      return sortedCards;
     })
     .catch((error) => {
       console.log(error);
@@ -54,8 +56,8 @@ const deleteCardApi = (card_id) => {
   });
 };
 // change like count
-const AddCardLikeApi = (card_id) => {
-  return axios.put(`${URL}/cards/${card_id}/like`).catch((error) => {
+const AddCardLikeApi = (board_id, card_id) => {
+  return axios.put(`${URL}/boards/${board_id}/cards/${card_id}/like`).catch((error) => {
     console.log(error);
   });
 };
@@ -118,7 +120,7 @@ function App() {
 
   // Add 1 to like of a card
   const addLikeToCard = (cardId) => {
-    AddCardLikeApi(cardId)
+    AddCardLikeApi(selectedBoard.board_id, cardId)
       .then(() => {
         setCardData(prevCards => 
           prevCards.map(card => 
