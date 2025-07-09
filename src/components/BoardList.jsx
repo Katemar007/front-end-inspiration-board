@@ -24,8 +24,8 @@ import BoardTile from "./BoardTile";
 // }
 
 function BoardList({ boards, selectedBoard, onBoardSelect }) {
-  console.log('Boards');
-  console.log(boards);
+  // console.log('Boards');
+  // console.log(boards);
   return (
     <div>
       <h2>Boards</h2>

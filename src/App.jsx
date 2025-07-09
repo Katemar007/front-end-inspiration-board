@@ -4,6 +4,7 @@ import './App.css';
 import BoardList from './components/BoardList';
 import CardList from './components/CardList';
 import BoardForm from './components/BoardForm';
+import CardForm from './components/CardForm';
 import { HashRouter, Route, Routes, Link } from "react-router-dom";
 
 const URL = import.meta.env.VITE_APP_BACKEND_URL;
@@ -12,7 +13,12 @@ const URL = import.meta.env.VITE_APP_BACKEND_URL;
 const postCardApi = (boardId, newCardData)=> {
   return axios.post(`${URL}/boards/${boardId}/cards`,newCardData)
     .then(response => {
+      console.log("Card creation response: ", response.data);
       const card = response.data.card;
+      if (!card) {
+        console.error("No card created in response!");
+        return null;
+      }
       return {
         card_id : card.card_id,
         message: card.message,
@@ -97,7 +103,7 @@ function App() {
   };
   // add card to the selected board
   const addNewCard = (newCardData) => {
-    postCardApi(selectedBoard.board_id, newCardData)
+    postCardApi(selectedBoard.id, newCardData)
       .then(newCard => {
         setCardData(prevCards => [...prevCards, newCard]);
       });
@@ -144,12 +150,26 @@ function App() {
         selectedBoard={selectedBoard}
         onBoardSelect={setSelectedBoard}
       />
+      {selectedBoard && selectedBoard.id && (
+        <>
+          <h2>Cards for "{selectedBoard.title}"</h2>
+          <CardList
+            cards={cardData}
+            onDeleteCard={deleteCard}
+            onAddLike={addLikeToCard}
+          ></CardList>
+          <div className="card-form-container">
+            <CardForm postNewCard={addNewCard} selectedBoard={selectedBoard} />
+          </div>
+        </>
+      )}
+      {/* <h2>Cards</h2>
       <CardList
         cards={cardData}
         onDeleteCard={deleteCard}
         onAddCard={addNewCard}
         onAddLike={addLikeToCard}
-      ></CardList>
+      ></CardList> */}
     </div>
   );
 }
