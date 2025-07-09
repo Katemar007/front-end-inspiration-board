@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './BoardForm.css';
+import './Form.css';
 
 function BoardForm({ onBoardSubmit }) {
   const [title, setTitle] = useState('');
@@ -25,7 +25,7 @@ function BoardForm({ onBoardSubmit }) {
   };
 
   return (
-    <form className="board-form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <h2>Create a New Board</h2>
       <label>
         Title:

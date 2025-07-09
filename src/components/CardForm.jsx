@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './CardForm.css'; // Optional, if you want custom styles
+import './Form.css';
 
 const kDefaultFormState = {
   message: ''
@@ -11,8 +11,13 @@ const CardForm = ({ postNewCard }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!formData.message.trim()) { // Add in check for < 40 characters long 
+    if (!formData.message.trim()) {
       setError('Message is required');
+      return;
+    }
+
+    if (formData.message.trim().length > 40) {
+      setError('Message must be less than 40 characters');
       return;
     }
 
@@ -31,7 +36,7 @@ const CardForm = ({ postNewCard }) => {
   };
 
   return (
-    <form className="card-form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <h2>Add a New Card</h2>
       <label>
         Message:

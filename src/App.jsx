@@ -167,13 +167,6 @@ function App() {
           </div>
         </>
       )}
-      {/* <h2>Cards</h2>
-      <CardList
-        cards={cardData}
-        onDeleteCard={deleteCard}
-        onAddCard={addNewCard}
-        onAddLike={addLikeToCard}
-      ></CardList> */}
     </div>
   );
 }
