@@ -54,10 +54,22 @@ const deleteCardApi = (card_id) => {
   });
 };
 // change like count
-const AddCardLikeApi = (card_id) => {
-  return axios.put(`${URL}/cards/${card_id}/like`).catch((error) => {
-    console.log(error);
-  });
+// const AddCardLikeApi = (card_id) => {
+//   return axios.put(`${URL}/cards/${card_id}/like`).catch((error) => {
+//     console.log(error);
+//   });
+// };
+const AddCardLikeApi = (board_id, card_id) => {
+  return axios
+    .put(`${URL}/boards/${board_id}/cards/${card_id}/like`)
+    .then(response => {
+      console.log("Like response:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    });
 };
 
 
@@ -118,7 +130,9 @@ function App() {
 
   // Add 1 to like of a card
   const addLikeToCard = (cardId) => {
-    AddCardLikeApi(cardId)
+    if (!selectedBoard) return;
+
+    AddCardLikeApi(selectedBoard.id, cardId)
       .then(() => {
         setCardData(prevCards => 
           prevCards.map(card => 
