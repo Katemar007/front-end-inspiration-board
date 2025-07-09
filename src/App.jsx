@@ -67,6 +67,7 @@ function App() {
   const [boardsData, setBoardsData] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [showBoardForm, setShowBoardForm] = useState(true);
+  const [showCardForm, setShowCardForm] = useState(true);
   const [cardData, setCardData] = useState([]);
 
   // getting all boards on load
@@ -103,6 +104,9 @@ function App() {
   const toggleBoardForm = () => {
     setShowBoardForm(prev => !prev);
   };
+  const toggleCardForm = () => {
+    setShowCardForm(prev => !prev);
+  };
   // add card to the selected board
   const addNewCard = (newCardData) => {
     postCardApi(selectedBoard.id, newCardData)
@@ -137,17 +141,29 @@ function App() {
   return (
     <div className="App">
       <h1>Inspiration Board</h1>
-
-      {/* Board toggle button */}
-      <div className="board-form-container">
-        {showBoardForm && (
-          <BoardForm onBoardSubmit={addNewBoard} />
-        )}      
-        <button id="toggle-board-form" onClick={toggleBoardForm}>
-          {showBoardForm ? "Hide Board form" : "Show Board form"}
-        </button>
+      <div className="forms-section">
+        {/* Board toggle button */}
+        <div className="form-container">
+          {showBoardForm && (
+            <BoardForm onBoardSubmit={addNewBoard} />
+          )}      
+          <button id="toggle-form" onClick={toggleBoardForm}>
+            {showBoardForm ? "Hide Board form" : "Show Board form"}
+          </button>
+        </div>
+        {/* Render or Hide the form */}
+        <div className="form-container">
+          {showCardForm && (
+            <CardForm 
+              postNewCard={addNewCard} 
+              selectedBoard={selectedBoard}>
+            </CardForm>
+          )}
+          <button id="toggle-form" onClick={toggleCardForm}>
+            {showCardForm ? "Hide card form" : "Show card form"}
+          </button>
+        </div>
       </div>
-      {/* Render or Hide the form */}
 
       <BoardList
         boards={boardsData}
@@ -162,9 +178,6 @@ function App() {
             onDeleteCard={deleteCard}
             onAddLike={addLikeToCard}
           ></CardList>
-          <div className="card-form-container">
-            <CardForm postNewCard={addNewCard} selectedBoard={selectedBoard} />
-          </div>
         </>
       )}
     </div>

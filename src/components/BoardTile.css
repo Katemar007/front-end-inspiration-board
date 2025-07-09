@@ -1,6 +1,6 @@
 .board-tile {
-  background-color: #fff9c4; 
-  border: 2px solid #f0e68c;
+  background-color: #ffffff; 
+  border: 2px solid #d8d8d8;
   aspect-ratio: 1 / 1; /* square shape like the cards */
   padding: 15px;
   margin: 10px;

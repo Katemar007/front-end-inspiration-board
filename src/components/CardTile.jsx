@@ -1,10 +1,17 @@
 import './CardTile.css';
+import { useMemo } from 'react';
 
 const CardTile = ({ message, likesCount, onDelete, onLike }) => { // add id in later
+  const colorClass = useMemo(() => {
+    const colors = ['green', 'pink', 'yellow', 'blue'];
+    const index = Math.floor(Math.random() * colors.length);
+    return colors[index];
+  }, []);
+
   return (
-    <div className="card-tile">
+    <div className={`card-tile ${colorClass}`}>
       <p className="message-box">{message}</p>
-      <p className="footer grid-box">{likesCount}</p>
+      <button className="footer grid-box">{likesCount}</button>
       <button className="footer grid-box" onClick={onLike}>+1</button>
       <button className="footer grid-box" onClick={onDelete}>delete</button>
     </div>
