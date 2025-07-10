@@ -11,9 +11,11 @@ const CardTile = ({ message, likesCount, onDelete, onLike }) => { // add id in l
   return (
     <div className={`card-tile ${colorClass}`}>
       <p className="message-box">{message}</p>
-      <button className="footer grid-box">{likesCount}</button>
-      <button className="footer grid-box" onClick={onLike}>+1</button>
-      <button className="footer grid-box" onClick={onDelete}>delete</button>
+      <div className="footer">
+        <div className="grid-box">{likesCount}</div>
+        <button className="grid-box" onClick={onLike}>+1</button>
+        <button className="grid-box" onClick={onDelete}>delete</button>
+      </div>
     </div>
   )
 }
