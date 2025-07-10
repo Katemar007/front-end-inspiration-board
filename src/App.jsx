@@ -5,7 +5,7 @@ import BoardList from './components/BoardList';
 import CardList from './components/CardList';
 import BoardForm from './components/BoardForm';
 import CardForm from './components/CardForm';
-import { HashRouter, Route, Routes, Link } from "react-router-dom";
+import CardSortDropdown from './components/CardSortDropdown';
 
 const URL = import.meta.env.VITE_APP_BACKEND_URL;
 
@@ -62,13 +62,14 @@ const AddCardLikeApi = (board_id, card_id) => {
   });
 };
 
-
 function App() {
   const [boardsData, setBoardsData] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [showBoardForm, setShowBoardForm] = useState(true);
   const [showCardForm, setShowCardForm] = useState(true);
   const [cardData, setCardData] = useState([]);
+  const [sortedCards, setSortedCards] = useState([]);
+  const [sortOption, setSortOption] = useState("card_id"); // default sort by ID
 
   // getting all boards on load
   useEffect(() => {
@@ -137,7 +138,25 @@ function App() {
         );
       });
   };
-  
+
+  // to sort the cards based on dropdown option
+  useEffect(() => {
+    const sorted = [...cardData]; // never sort state directly!
+    switch (sortOption) {
+    case "likes":
+      sorted.sort((a, b) => b.likes_count - a.likes_count);
+      break;
+    case "alpha":
+      sorted.sort((a, b) => a.message.localeCompare(b.message));
+      break;
+    case "card_id":
+    default:
+      sorted.sort((a, b) => a.card_id - b.card_id);
+      break;
+    }
+    setSortedCards(sorted);
+  }, [cardData, sortOption]);
+
   return (
     <div className="App">
       <h1>Inspiration Board</h1>
@@ -166,7 +185,7 @@ function App() {
       </div>
 
       <div className="board-list-box">
-        <h2>All Boards</h2>
+        <h2>Boards</h2>
         <BoardList
           boards={boardsData}
           selectedBoard={selectedBoard}
@@ -180,8 +199,12 @@ function App() {
             <p>Owner: {selectedBoard.owner}</p>
           </div>
           <h2>Cards for "{selectedBoard.title}"</h2>
+          <CardSortDropdown 
+            selectedOption={sortOption} 
+            onChange={setSortOption} 
+          ></CardSortDropdown>
           <CardList
-            cards={cardData}
+            cards={sortedCards}
             onDeleteCard={deleteCard}
             onAddLike={addLikeToCard}
           ></CardList>
