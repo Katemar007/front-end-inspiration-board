@@ -1,14 +1,12 @@
 .board-tile {
-  background-color: #ffffff; 
-  border: 2px solid #d8d8d8;
-  aspect-ratio: 1 / 1; /* square shape like the cards */
-  padding: 15px;
-  margin: 10px;
-  border-radius: 10px;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: 1rem;
   cursor: pointer;
-  width: 200px;
-  transition: transform 0.2s ease;
+  width: 180px;
+  transition: transform 0.2s ease, background-color 0.3s;
+  background-color: var(--tile-color);
 }
 
 .board-tile:hover {
