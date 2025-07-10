@@ -29,3 +29,24 @@
 #toggle-form:hover {
   background-color: #535bf2;
 }
+
+.board-list-box {
+  border: 2px solid #ccc;
+  padding: 1rem;
+  margin: 1rem auto;
+  width: 90%;
+  max-width: 800px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.selected-board-info {
+  border: 1px solid #c8d6e5;
+  background-color: #e8f0fe;
+  padding: 1rem;
+  margin: 1rem auto;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 8px;
+}

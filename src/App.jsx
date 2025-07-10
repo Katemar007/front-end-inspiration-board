@@ -165,13 +165,20 @@ function App() {
         </div>
       </div>
 
-      <BoardList
-        boards={boardsData}
-        selectedBoard={selectedBoard}
-        onBoardSelect={setSelectedBoard}
-      />
+      <div className="board-list-box">
+        <h2>All Boards</h2>
+        <BoardList
+          boards={boardsData}
+          selectedBoard={selectedBoard}
+          onBoardSelect={setSelectedBoard}
+        />
+      </div>
       {selectedBoard && selectedBoard.id && (
         <>
+          <div className="selected-board-info">
+            <h2>Selected Board: {selectedBoard.title}</h2>
+            <p>Owner: {selectedBoard.owner}</p>
+          </div>
           <h2>Cards for "{selectedBoard.title}"</h2>
           <CardList
             cards={cardData}
